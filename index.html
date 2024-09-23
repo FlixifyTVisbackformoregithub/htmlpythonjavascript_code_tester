@@ -1,0 +1,244 @@
+<link rel="shortcut icon" type="image/png" href="https://i.ibb.co/pw6LF7G/Untitled-design-34.png">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝐓𝐞𝐬𝐭𝐁𝐞𝐧𝐜𝐡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            display: flex;
+        }
+
+        /* Fixed Sidebar Styles */
+        #sidebar {
+            position: fixed; /* Fixed sidebar */
+            width: 250px;
+            height: 100vh; /* Full height */
+            background-color: #343a40; /* Dark color for the sidebar */
+            color: white;
+            padding: 20px;
+            overflow-y: auto; /* Enable vertical scrolling for sidebar if content exceeds view */
+        }
+
+        #sidebar h1 {
+            font-size: 24px;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        #sidebar nav {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #sidebar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #sidebar a:hover {
+            background-color: #495057; /* Darker shade on hover */
+        }
+
+        #main {
+            margin-left: 270px; /* Adjusted margin to avoid sidebar */
+            flex: 1; /* Allows the main content to fill the remaining space */
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* Content Header */
+        #contentHeader {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #contentHeader h2 {
+            margin: 0;
+        }
+
+        /* Input and Output Panels */
+        #testerContainer {
+            display: none; /* Hidden by default */
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        .panel {
+            background-color: #ffffff; /* White background for panels */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            border: 1px solid #007BFF;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #0056b3;
+        }
+
+        #output {
+            min-height: 350px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            overflow: auto;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            #sidebar {
+                position: relative; /* Revert to relative for smaller widths */
+                width: 100%;
+                height: auto;
+            }
+
+            #main {
+                margin-left: 0; /* No margin needed for main content */
+            }
+
+            button {
+                width: 100%; /* Full-width buttons on small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar">
+        <h1>Code Tester</h1>
+        <nav>
+            <a href="#" onclick="showTester('html')">HTML Tester</a>
+            <a href="#" onclick="showTester('javascript')">JavaScript Tester</a>
+            <a href="#" onclick="showTester('python')">Python Tester</a>
+        </nav>
+    </div>
+
+    <div id="main">
+        <div id="contentHeader">
+            <h2>Code Tester</h2>
+        </div>
+
+        <!-- Tester Container -->
+        <div id="testerContainer">
+            <!-- HTML Tester -->
+            <div id="htmlTester" class="panel">
+                <h3>HTML Input</h3>
+                <textarea id="htmlInput" placeholder="Enter your HTML code here..."></textarea>
+                <button onclick="runHTML()">Run HTML Code</button>
+                <h3>HTML Output</h3>
+                <div id="htmlOutput"></div>
+            </div>
+
+            <!-- JavaScript Tester -->
+            <div id="javascriptTester" class="panel" style="display: none;">
+                <h3>JavaScript Input</h3>
+                <textarea id="jsInput" placeholder="Enter your JavaScript code here..."></textarea>
+                <button onclick="runJS()">Run JavaScript Code</button>
+                <h3>JavaScript Output</h3>
+                <div id="jsOutput"></div>
+            </div>
+
+            <!-- Python Tester -->
+            <div id="pythonTester" class="panel" style="display: none;">
+                <h3>Python Input</h3>
+                <textarea id="pythonInput" placeholder="Enter your Python code here..."></textarea>
+                <button onclick="runPython()">Run Python Code</button>
+                <h3>Python Output</h3>
+                <div id="pythonOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the appropriate tester
+        function showTester(tester) {
+            document.getElementById('testerContainer').style.display = 'flex';
+            document.getElementById('htmlTester').style.display = (tester === 'html') ? 'block' : 'none';
+            document.getElementById('javascriptTester').style.display = (tester === 'javascript') ? 'block' : 'none';
+            document.getElementById('pythonTester').style.display = (tester === 'python') ? 'block' : 'none';
+
+            // Clear previous output
+            clearOutputs();
+        }
+
+        // Clear all outputs
+        function clearOutputs() {
+            document.getElementById('htmlOutput').innerHTML = "";
+            document.getElementById('jsOutput').innerHTML = "";
+            document.getElementById('pythonOutput').innerHTML = "";
+            document.getElementById('htmlInput').value = "";
+            document.getElementById('jsInput').value = "";
+            document.getElementById('pythonInput').value = "";
+        }
+
+        // Functions to run the code
+        function runHTML() {
+            const userInput = document.getElementById("htmlInput").value;
+            document.getElementById("htmlOutput").innerHTML = userInput;
+        }
+
+        function runJS() {
+            const userInput = document.getElementById("jsInput").value;
+            try {
+                const result = eval(userInput); // Use eval cautiously!
+                document.getElementById("jsOutput").innerHTML = result;
+            } catch (error) {
+                document.getElementById("jsOutput").innerHTML = error;
+            }
+        }
+
+        function runPython() {
+            document.getElementById("pythonOutput").innerHTML = "Python execution is not supported with pure HTML/JS.";
+            // Python can be executed on the server-side, typically with a back-end framework
+            // or using services like Flask or Django. This just shows a placeholder message.
+        }
+    </script>
+</body>
+
+</html>
